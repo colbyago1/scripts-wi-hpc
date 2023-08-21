@@ -13,7 +13,7 @@ temp_file=$(mktemp)
 echo "$content" > "$temp_file"
 
 # Split the temporary file into multiple smaller files
-split -l 100 "$temp_file" rmsd_
+split -l 100 "$temp_file" findmuts_
 
 # Clean up the temporary file
 rm "$temp_file"
@@ -21,14 +21,14 @@ rm "$temp_file"
 # Array to store job IDs
 job_ids=()
 
-for file in rmsd_*
+for file in findmuts_*
 do
     while [ $(squeue -u cagostino -t running,pending | wc -l) -gt 250 ]
     do
         sleep 1
     done
     # Submit the job and capture the job ID
-    job_id=$(sbatch /home/cagostino/work/scripts/rmsd/parallelized/run.sh $reference $file | awk '{print $4}')
+    job_id=$(sbatch /home/cagostino/work/scripts/helper/muts/parallelized/run.sh $reference $file | awk '{print $4}')
     job_ids+=("$job_id")
 done
 
@@ -41,6 +41,6 @@ for job_id in "${job_ids[@]}"
         rm "slurm-$job_id.out"
     done
 
-echo "$header,rmsd" > output_rmsd.csv
-cat rmsd_*.output.csv >> output_rmsd.csv
-rm rmsd_*
+echo "$header,muts" > output_muts.csv
+cat findmuts_*.output.csv >> output_muts.csv
+rm findmuts_*

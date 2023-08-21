@@ -7,7 +7,7 @@ while IFS=',' read -r pdb_filename rest_of_line; do
     if [ -e "$pdb_filename" ]
     then
         # Run the Python script and capture its output
-        output=$(python /home/cagostino/work/scripts/rmsd/rmsd.py $pdb_filename $reference)
+        output=$(python /home/cagostino/work/scripts/rmsd/parallelized/rmsd.py $pdb_filename $reference)
 
         # Extract the last word from the output using awk
         rmsd=$(echo "$output" | awk '{print $NF}')
@@ -19,5 +19,6 @@ while IFS=',' read -r pdb_filename rest_of_line; do
         new_line="$pdb_filename,$rest_of_line"
     fi
     # Write the new line to a temporary file
+    new_line="${new_line//,,/,}"
     echo "$new_line" >> "$2.output.csv"
 done < "$2"

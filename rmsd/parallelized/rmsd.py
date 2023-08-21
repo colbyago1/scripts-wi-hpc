@@ -1,29 +1,37 @@
 import argparse
 from Bio.PDB import PDBParser, Superimposer
+from collections import defaultdict
+
+def reorder_chains(structure, reference_structure):
+    chain_order = [chain.id for chain in reference_structure[0]]
+    reordered_structure = defaultdict(list)
+
+    for model in structure:
+        for chain_id in chain_order:
+            if chain_id in model:
+                reordered_structure[model.id].append(model[chain_id])
+
+    return reordered_structure
 
 def calculate_backbone_rmsd(structure_1_path, structure_2_path):
-    # Instantiate a PDB parser
-    pdb_parser = PDBParser(QUIET = True)
+    pdb_parser = PDBParser(QUIET=True)
 
-    # Parse the structures
     structure_1 = pdb_parser.get_structure('STRUCTURE1', structure_1_path)
     structure_2 = pdb_parser.get_structure('STRUCTURE2', structure_2_path)
 
-    # Select the first model from each structure
-    model_1 = structure_1[0]
-    model_2 = structure_2[0]
+    reordered_structure_2 = reorder_chains(structure_2, structure_1)
 
-    # Get backbone atoms from each model
-    atoms_model_1 = [atom for atom in model_1.get_atoms() if atom.name in ['N', 'CA', 'C']]
-    atoms_model_2 = [atom for atom in model_2.get_atoms() if atom.name in ['N', 'CA', 'C']]
+    atoms_model_1 = []
+    atoms_model_2 = []
 
-    # Make sure the two structures have the same number of atoms
+    for chain in structure_1[0]:
+        atoms_model_1.extend([atom for atom in chain.get_atoms() if atom.name in ['N', 'CA', 'C']])
+        atoms_model_2.extend([atom for atom in reordered_structure_2[structure_1[0].id][0].get_atoms() if atom.name in ['N', 'CA', 'C']])
+        reordered_structure_2[structure_1[0].id].pop(0)
+
     assert len(atoms_model_1) == len(atoms_model_2), "Structures have different numbers of atoms"
 
-    # Create a Superimposer instance
     super_imposer = Superimposer()
-
-    # Apply the superimposition on the atom vectors of the first model of each structure
     super_imposer.set_atoms(atoms_model_1, atoms_model_2)
 
     return super_imposer.rms
@@ -36,7 +44,7 @@ def main():
     args = parser.parse_args()
 
     rmsd = calculate_backbone_rmsd(args.structure_1, args.structure_2)
-    print(args.structure_1,",",args.structure_2,",",rmsd)
+    print(args.structure_1, ",", args.structure_2, ",", rmsd)
 
 if __name__ == "__main__":
     main()

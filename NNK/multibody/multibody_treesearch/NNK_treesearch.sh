@@ -14,6 +14,10 @@ job_ids=()
 python mutate_wt.py "$pdb" "$partners"
 read wt_unbound wt_nrg < "wt"
 
+
+# init output.csv
+echo "pdb,unbound nrg,ratio" > output.csv
+
 index=0
 
 while [ $index -lt $depth ]

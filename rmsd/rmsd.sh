@@ -2,8 +2,13 @@
 
 reference="$1"
 
+# Process the first line separately to add the "rmsd" header
+IFS='' read -r header < "$2"
+new_header="$header,rmsd"
+echo "$new_header" > output_rmsd.csv
+
 # Loop through each line in the CSV file
-while IFS=',' read -r pdb_filename rest_of_line; do
+tail -n +2 "$2" | while IFS=',' read -r pdb_filename rest_of_line; do
     if [ -e "$pdb_filename" ]
     then
         # Run the Python script and capture its output
@@ -19,5 +24,7 @@ while IFS=',' read -r pdb_filename rest_of_line; do
         new_line="$pdb_filename,$rest_of_line"
     fi
     # Write the new line to a temporary file
+    new_line="${new_line//,,/,}"
     echo "$new_line" >> output_rmsd.csv
-done < "$2"
+done
+
