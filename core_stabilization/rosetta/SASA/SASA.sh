@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pdb=("815-1-18_GL_HC_dock_run083_0007_0001_chainA.pdb")
+pdb="$1"
 cutoff=20
 aminos=(G A L M F W K Q E S P V I C Y H R N D T)
 

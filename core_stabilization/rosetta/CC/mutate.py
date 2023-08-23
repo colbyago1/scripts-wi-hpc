@@ -126,10 +126,8 @@ parser.add_option('--positions', dest = 'positions',
 # PDB file option
 pdb_filename = options.pdb
 mutate_posi = int(options.posi)
-mutate_positions = [int(i) for i in options.positions.split('|')]
-print(mutate_positions)
+mutate_positions = [int(i) for i in options.positions.split('|') if int(i) > mutate_posi]
 
 for mutate_position in mutate_positions:
-    if mutate_position != mutate_posi:
         mutate(pdb_filename, mutate_posi, mutate_position)
 

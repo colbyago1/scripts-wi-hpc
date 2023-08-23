@@ -5,7 +5,7 @@ import json
 import os
 import shutil
 
-json_files = glob('./seq*/ranking_debug.json')
+json_files = glob('./*/ranking_debug.json')
 #print(json_files[0])
 
 os.makedirs('output_files')

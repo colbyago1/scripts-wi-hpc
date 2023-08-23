@@ -1,6 +1,6 @@
 #!/bin/bash
 
-input_fasta=("815-1-18_GL_HC_dock_run083_0007_0001_chainA.fasta")
+input_fasta="$1"
 aminos=(G A L M F W K Q E S P V I C Y H R N D T)
 
 wt_seq=$(sed -n '2p' "$input_fasta")

@@ -18,7 +18,7 @@ def pdb_to_fasta(pdb_file, fasta_file):
                         one_letter_code = seq1(three_letter_code)
                         sequence += one_letter_code
                 if sequence:
-                    output_fasta.write(f">{model.id}_{chain.id}\n")
+                    output_fasta.write(f">{sys.argv[1][:-4]}\n")
                     output_fasta.write(f"{sequence}\n")
                     
 if __name__ == "__main__":

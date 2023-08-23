@@ -6,7 +6,6 @@ import os
 import shutil
 import pickle
 import pandas as pd
-import numpy as np
 
 json_files = glob('./*/ranking_debug.json')
 #print(json_files[0])
@@ -14,7 +13,7 @@ json_files = glob('./*/ranking_debug.json')
 os.makedirs('output_files')
 csv_file_path = "output_files/AF_tm.csv"
 with open(csv_file_path, mode='w') as csv_file:
-    csv_file.write("filename,iptm+ptm" + '\n')
+    csv_file.write("filename,plddts" + '\n')
 
 # Loop through the JSON files
 for json_file_path in json_files:
@@ -47,7 +46,7 @@ for json_file_path in json_files:
             for filename,tm in zip(new_pdb_files,tm_values):
                 csv_file.write(f"{filename},{tm}" + '\n')
         
-pkl_files = glob('./*/result_model_*_multimer_v2_pred_0.pkl')
+pkl_files = glob('./*/result_model_*_ptm_pred_0.pkl')
 # print(pkl_files)
 
 csv_file_path = "output_files/AF_pkl.csv"
@@ -59,9 +58,6 @@ for pkl_file_path in pkl_files:
     with open(pkl_file_path, 'rb') as pkl_file:
         data = pickle.load(pkl_file)
         pae = data["max_predicted_aligned_error"]
-        
-        # EX. AVERAGE ARRAY TO GET PLDDT OR OTHER METRICS
-        # pae = np.mean(data["plddt"])
 
         # pdb file path
         pdb_file_path = pkl_file_path.rsplit('/', 1)[0]

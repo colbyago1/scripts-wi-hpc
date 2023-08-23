@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # input protein
-pdb=("815-1-18_GL_HC_dock_run083_0007_0001_chainA.pdb")
+pdb="$1"
 
 # get length of protein
 length=$(bash /home/cagostino/work/scripts/core_stabilization/rosetta/CC/findL.sh $pdb)
