@@ -1,11 +1,11 @@
 #!/bin/sh
 
 pdb="$1"
-cutoff=20
+cutoff=0.3
 aminos=(G A L M F W K Q E S P V I C Y H R N D T)
 
 # calculate sasa
-/home/dwkulp/software/mslib/bin/calculateSasa --pdb $pdb --reportByResidue --writePdb > sasa.log
+/home/dwkulp/software/mslib.git/mslib/bin/calculateSasa --pdb $pdb --reportByResidue --writePdb --writeNormSasa > sasa.log
 
 # init csv
 echo "resi,sasa" > sasa.csv
@@ -19,7 +19,7 @@ while IFS= read -r line; do
     if [ "$first_word" = "A" ]; then
         # Extract the second and fourth words
         resi=$(echo "$line" | awk '{print $2}')
-        sasa=$(echo "$line" | awk '{print $4}')
+        sasa=$(echo "$line" | awk '{print $5}')
 
         # Print or store the second and fourth words as needed
         echo "$resi,$sasa" >> sasa.csv
@@ -36,10 +36,12 @@ do
     then
         positions+=("$resi")
     fi
-done < (tail -n +2 "sasa.csv")
+done < <(tail -n +2 "sasa.csv")
 
 # Array to store job IDs
 job_ids=()
+
+echo "${positions[@]}"
 
 # run mutate
 for i in "${positions[@]}"

@@ -45,7 +45,7 @@ do
     do
         if [ -f "${pdb:0:-4}_C$i-C$j.pdb" ]
         then
-            while [ $(squeue -u cagostino -t pending | wc -l) -gt 1 ]
+            while [ $(squeue -u cagostino -t pending | wc -l) -gt 5 ]
             do
                 sleep 1
             done
@@ -66,7 +66,7 @@ do
 done
 
 # create csv
-echo "filename,rmsd" > output.csv
+echo "filename,numDisulfs" > output.csv
 for i in "${positions[@]}"
 do
     for j in "${positions[@]}"
@@ -74,15 +74,15 @@ do
         if [ -f "${pdb:0:-4}_C$i-C$j.log" ]
         then
             # Use grep to find the line containing the desired pattern
-            line=$(grep 'BEST DISFULIDE HAS RMSD:' "${pdb:0:-4}_C$i-C$j.log")
+            line=$(grep 'DATA' "${pdb:0:-4}_C$i-C$j.log")
             # Check if the line is not empty (i.e., it exists)
             if [ -n "$line" ]
             then
                 # Use awk to extract the float value from the end of the line
-                rmsd=$(echo "$line" | awk '{print $NF}')
+                numDisulfs=$(echo "$line" | awk '{print $6}')
 
                 #write to csv
-                echo "${pdb:0:-4}_C$i-C$j.pdb,$rmsd" >> output.csv
+                echo "${pdb:0:-4}_C$i-C$j.pdb,$numDisulfs" >> output.csv
             fi
         fi
     done

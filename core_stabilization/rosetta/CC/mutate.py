@@ -27,8 +27,9 @@ def mutate(pdb_filename, posi1, posi2):
     #Variables initiation
     name = pdb_filename[:-4]+'_C'+str(posi1)+'-C'+str(posi2)
 
-    pack(testPose, posi1, posi2, 'rs'+name, scorefxn)
-    testPose.dump_pdb(name + '.pdb')
+    if(((center_of_mass(pose,posi1,posi1)-center_of_mass(pose,posi2,posi2)).norm()<12) and abs(posi1 - posi2) != 1):
+        pack(testPose, posi1, posi2, 'rs'+name, scorefxn)
+        testPose.dump_pdb(name + '.pdb')
 
 #Return wild type amino acid
 def wildtype(aatype = 'AA.aa_gly'):

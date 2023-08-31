@@ -9,6 +9,6 @@
 
 source ~/.bashrc
 micromamba activate pymol
-python align.py $1 $4
+python super.py $1 $4
 micromamba activate PyRosetta.notebooks
 python multibody_bind.py $1 $2 $3

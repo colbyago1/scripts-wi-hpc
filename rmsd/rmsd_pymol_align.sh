@@ -12,7 +12,17 @@ tail -n +2 "$2" | while IFS=',' read -r pdb_filename rest_of_line; do
     if [ -e "$pdb_filename" ]
     then
         # Run the Python script and capture its output
-        output=$(python /home/cagostino/work/scripts/rmsd/rmsd.py $pdb_filename $reference)
+        output=$(python /home/cagostino/work/scripts/rmsd/rmsd_pymol_align.py $pdb_filename $reference)
+
+        # Extract the last word from the output using awk
+        rmsd=$(echo "$output" | awk '{print $NF}')
+        
+        # Append the RMSD value to the line and create a new line
+        new_line="$pdb_filename,$rest_of_line,$rmsd"
+    elif [ -e "${pdb_filename::-9}${pdb_filename:(-4)}" ]
+    then
+        # Run the Python script and capture its output
+        output=$(python /home/cagostino/work/scripts/rmsd/rmsd_pymol_align.py "${pdb_filename::-9}${pdb_filename:(-4)}" $reference)
 
         # Extract the last word from the output using awk
         rmsd=$(echo "$output" | awk '{print $NF}')
