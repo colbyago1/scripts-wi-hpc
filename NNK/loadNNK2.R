@@ -1,5 +1,5 @@
 # Load the analysis script that has lots of functions in it
-#source("/wistar/kulp/users/dwkulp/software/kulplab_scripts/deep_seq_anal/analyzeNNK.R");
+source("/Volumes/kulp/linux/users/dwkulp/software/kulplab_scripts/deep_seq_anal/analyzeNNK.R");
 
 # Setup for the specific library requires sequence of library positions ONLY and position IDs in order.
 setupNNKAnalysis(theSeq="VSTQLLIRSEQILNNAKIIIVTVKSIRIGPGQAFYYTFAQSSGGDLEITTHSIINMWQRAGQAMYTRDGGKDNNVNETFRPGGSDMRDNWRS",thePositions=c(255:260,272:286,303:309,312:320,361:375,423:435,455:481));

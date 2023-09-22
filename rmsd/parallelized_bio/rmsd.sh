@@ -7,7 +7,7 @@ while IFS=',' read -r pdb_filename rest_of_line; do
     if [ -e "$pdb_filename" ]
     then
         # Run the Python script and capture its output
-        output=$(python /home/cagostino/work/scripts/rmsd/parallelized/rmsd.py $pdb_filename $reference)
+        output=$(python /home/cagostino/work/scripts/rmsd/parallelized_bio/rmsd.py $pdb_filename $reference)
 
         # Extract the last word from the output using awk
         rmsd=$(echo "$output" | awk '{print $NF}')

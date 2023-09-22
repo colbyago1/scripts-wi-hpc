@@ -7,4 +7,4 @@
 #SBATCH --mem=3GB                       # total memory allocated for all tasks
 #SBATCH --time=01:00:00                 # total run time limit (HH:MM:SS)
 
-bash /home/cagostino/work/scripts/rmsd/parallelized/rmsd.sh "$1" "$2"
+bash /home/cagostino/work/scripts/rmsd/parallelized_bio/rmsd.sh "$1" "$2"

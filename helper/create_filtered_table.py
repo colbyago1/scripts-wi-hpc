@@ -10,7 +10,7 @@ output_filename = 'filtered.csv'
 df = pd.read_csv(input_filename)
 
 # Sort DataFrame based on the 'I_sc' field in ascending order
-filtered = df[(df['total_score'] < -500) & (df['rmsd'] < 4)]
+filtered = df[(df['total_score'] < -500) & (df['rmsd'] < 2.8)]
 
 # Extract top 100 descriptions and save to a text file
 top_descriptions = filtered['description']

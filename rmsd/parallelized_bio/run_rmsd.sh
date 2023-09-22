@@ -28,7 +28,7 @@ do
         sleep 1
     done
     # Submit the job and capture the job ID
-    job_id=$(sbatch /home/cagostino/work/scripts/rmsd/parallelized/run.sh $reference $file | awk '{print $4}')
+    job_id=$(sbatch /home/cagostino/work/scripts/rmsd/parallelized_bio/run.sh $reference $file | awk '{print $4}')
     job_ids+=("$job_id")
 done
 
