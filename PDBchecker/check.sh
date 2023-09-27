@@ -204,8 +204,8 @@
 
 # done
 
-mkdir final_fas
-cp updated_fas/*.fasta final_fas
+# mkdir final_fas
+# cp updated_fas/*.fasta final_fas
 
 ### SECTION IV: MUTATE ###
 
@@ -213,40 +213,40 @@ cp updated_fas/*.fasta final_fas
 # SECTION I outputs 1-index of N
 # sequons.csv contains 0-index of N
 
-aa_old=("N")
-# use 1-index
-aa_posi=(148)
+# aa_old=("N")
+# # use 1-index
+# aa_posi=(148)
 
-> SECTION_IV.log
+# > SECTION_IV.log
 
-for p in *pdb
-do
-    NNKpath=$(echo "$p" | sed 's/\(.*0001\).*/\1/')
-    NNKfile="$HOME/work/workspace/H3RBS/esm/$NNKpath/output.csv"
+# for p in *pdb
+# do
+#     NNKpath=$(echo "$p" | sed 's/\(.*0001\).*/\1/')
+#     NNKfile="$HOME/work/workspace/H3RBS/esm/$NNKpath/output.csv"
 
-    seq=$(sed -n '2p' "final_fas/${p::-4}.fasta")
+#     seq=$(sed -n '2p' "final_fas/${p::-4}.fasta")
 
-    for ((i=0; i<${#aa_posi[@]}; i++))
-    do
-        posi=${aa_posi[i]}
-        aa_o=${aa_old[i]}
+#     for ((i=0; i<${#aa_posi[@]}; i++))
+#     do
+#         posi=${aa_posi[i]}
+#         aa_o=${aa_old[i]}
 
-        # Extract the character at the specified position
-        aa_at_posi="${seq:posi-1:1}"
+#         # Extract the character at the specified position
+#         aa_at_posi="${seq:posi-1:1}"
 
-        # Mutate if the amino acid at the given position matches aa_old
-        if [ "$aa_at_posi" = "$aa_o" ]
-        then
-            # Replace the character at the specified position
-            aa_from_NNK=$(python $HOME/work/scripts/PDBchecker/find_top_mut_at_posi.py $posi $NNKfile "CNST")
-            seq="${seq:0:posi-1}$aa_from_NNK${seq:posi}"
-            # Replace the second line of the FASTA file with the mutated sequence
-            sed -i "2s/.*/$seq/" final_fas/${p::-4}.fasta
-            echo "changing to $aa_at_posi to $aa_from_NNK at $posi" >> SECTION_IV.log
-        else
-            echo "$aa_at_posi != $aa_o @ $posi"
-        fi
-    done
-done
+#         # Mutate if the amino acid at the given position matches aa_old
+#         if [ "$aa_at_posi" = "$aa_o" ]
+#         then
+#             # Replace the character at the specified position
+#             aa_from_NNK=$(python $HOME/work/scripts/PDBchecker/find_top_mut_at_posi.py $posi $NNKfile "CNST")
+#             seq="${seq:0:posi-1}$aa_from_NNK${seq:posi}"
+#             # Replace the second line of the FASTA file with the mutated sequence
+#             sed -i "2s/.*/$seq/" final_fas/${p::-4}.fasta
+#             echo "changing to $aa_at_posi to $aa_from_NNK at $posi" >> SECTION_IV.log
+#         else
+#             echo "$aa_at_posi != $aa_o @ $posi"
+#         fi
+#     done
+# done
 
-echo "done"
+# echo "done"

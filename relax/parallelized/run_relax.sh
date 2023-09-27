@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for p in *pdb
+for p in *.pdb
 do
-    while [ $(squeue -u cagostino -t running,pending | wc -l) -gt 250 ]
+    while [ $(squeue -u cagostino -t pending | wc -l) -gt 250 ]
     do
         sleep 1
     done

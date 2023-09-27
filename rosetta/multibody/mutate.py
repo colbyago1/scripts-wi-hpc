@@ -25,6 +25,7 @@ def mutate(pose, posi, amino, partners, ID, bool_relax):
     
     #Variables initiation
     name = pdb_filename[:-4]+'_'+ID
+    if len(name) > 251: name = pdb_filename[:-4]+"_mutated"
     resfile = 'rs'+ name
     csvname = name + '.csv'
     pdbname = name + '.pdb'
