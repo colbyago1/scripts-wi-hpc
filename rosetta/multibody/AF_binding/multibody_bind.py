@@ -38,8 +38,8 @@ binding = unbound - bound
 
 content=(sys.argv[1]+','+str(unbound)+','+str(binding/float(sys.argv[3]))+'\n')
 
-fname = 'output.csv'
-f = open(fname,'a+')
+fname = 'sys.argv[1][:-4]_output.csv'
+f = open(fname,'w+')
 f.write(content)
 f.close()
 

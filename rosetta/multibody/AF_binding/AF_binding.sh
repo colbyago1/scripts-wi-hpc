@@ -24,5 +24,7 @@ do
     sbatch $HOME/work/scripts/rosetta/multibody/run.sh $p $partners $wt_nrg $wt_pdb
 done
 
+cat *_output.csv >> output.csv
+
 echo "done"
 

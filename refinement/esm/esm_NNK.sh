@@ -83,7 +83,7 @@ done
 
 for f in ./*fa
 do
-	while [ $(squeue -u cagostino -t pending | wc -l) -gt 5 ]
+	while [ $(squeue -u cagostino -t running | wc -l) -gt 250 ]
         do
         	sleep 1
         done
