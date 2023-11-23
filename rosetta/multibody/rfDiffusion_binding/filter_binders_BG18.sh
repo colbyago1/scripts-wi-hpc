@@ -8,6 +8,8 @@
 # > alignMolecules_Ab.log
 # > alignMolecules_binder.log
 
+# ### create complex PDB ###
+
 # tail -n +2 "$inFile" | while IFS=',' read -r backbone_output design trash rmsd lddt || [ -n "$backbone_output" ]; do
 #     # alignMolecules (binder)
 #     /home/dwkulp/software/mslib.git/mslib/bin/alignMolecules --pdb1 $backbone_output --pdb2 $design --sele1 "chain A and name CA" --sele2 "name CA" >> alignMolecules_binder.log
@@ -56,8 +58,10 @@
 # # Array to store job IDs
 # job_ids=()
 
+# ### relax complex PDB ###
+
 # for pdb in *_complex.pdb; do
-#     while [ $(squeue -u cagostino -t pending | wc -l) -gt 250 ]
+#     while [ $(squeue -u cagostino -t pending | wc -l) -gt 500 ]
 #     do
 #         sleep 1
 #     done
@@ -76,26 +80,98 @@
 
 # echo "done"
 
-# rdDiffusion binding
+# ### rfDiffusion binding and SASA ###
 
 # # init output.csv
 # echo "pdb,unbound_nrg,binding_nrg" > binding_output.csv
 # init output.csv
-echo "pdb,SASA_binder,SASA_Ab,SASA_total,SASA_diff" > SASA_output.csv
+# echo "pdb,SASA_binder,SASA_Ab,SASA_total,SASA_diff" > SASA_output.csv
+
+# # Array to store job IDs
+# job_ids=()
+    
+# for p in *complex_0001.pdb
+# do
+#     while [ $(squeue -u cagostino -t pending | wc -l) -gt 500 ]
+#     do
+#         sleep 1
+#     done
+#     # Submit the job and capture the job ID
+#     # job_id=$(/wistar/kulp/software/slurmq --sbatch "python $HOME/work/scripts/rosetta/multibody/rfDiffusion_binding/multibody_bind.py $p $partners" | awk '/Submitted batch job/ {print $4}')
+#     # job_ids+=("$job_id")
+#     job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/rosetta/multibody/rfDiffusion_binding/SASA.sh $p $partners" | awk '/Submitted batch job/ {print $4}')
+#     job_ids+=("$job_id")
+# done
+
+# for job_id in "${job_ids[@]}"; do
+#     while squeue -j "$job_id" 2>/dev/null | grep -q "$job_id"
+#     do
+#         sleep 1
+#     done
+#     rm "slurm-$job_id.out"
+# done
+
+# cat *_binding.csv >> binding_output.csv
+# cat *_SASA.csv >> SASA_output.csv
+
+# echo "done"
+
+### SASA hotspot ###
+
+# partners for SASA and rosetta binding (Ab_binder)
+# make sure chain in contact with binder is next to underscore
+partners="H_A"
+posis=("101" "102" "103" "104" "110" )
+# Chain from Ab in contact with binder
+Ab_contact='H'
+
+Ab="${partners%%_*}"
+
+if [ ${#Ab} -gt 1 ]; then
+    Ab=$(echo $Ab | sed 's/./&+/g' | sed 's/+$//')
+fi
+
+# for posi in "${posis[@]}"; do
+#     echo "pdb,posi,SASA_Ab,SASA_complex,SASA_diff" > "SASA_posi${posi}.csv" # run in other loop in filter file (remove p from name)
+# done
+
+# # Array to store job IDs
+# job_ids=()
+
+# for p in *complex_0001.pdb
+# do
+#     while [ $(squeue -u cagostino -t pending | wc -l) -gt 500 ]
+#     do
+#         sleep 1
+#     done
+#     # Submit the job and capture the job ID
+#     # calculate sasa
+#     job_id=$(/wistar/kulp/software/slurmq --sbatch "/home/dwkulp/software/mslib.git/mslib/bin/calculateSasa --pdb $p --writeNormSasa --reportByResidue | tail -n +14 | head -n -2 > ${p::-4}_SASA_total.txt" | awk '/Submitted batch job/ {print $4}')
+#     job_ids+=("$job_id")
+#     job_id=$(/wistar/kulp/software/slurmq --sbatch "/home/dwkulp/software/mslib.git/mslib/bin/calculateSasa --pdb $p --writeNormSasa --reportByResidue --sele "chain $Ab" | tail -n +14 | head -n -2 > ${p::-4}_SASA_Ab.txt" | awk '/Submitted batch job/ {print $4}')
+#     job_ids+=("$job_id")
+# done
+
+# for job_id in "${job_ids[@]}"; do
+#     while squeue -j "$job_id" 2>/dev/null | grep -q "$job_id"
+#     do
+#         sleep 1
+#     done
+#     rm "slurm-$job_id.out"
+# done
 
 # Array to store job IDs
 job_ids=()
-    
+
 for p in *complex_0001.pdb
 do
-    while [ $(squeue -u cagostino -t pending | wc -l) -gt 250 ]
+    while [ $(squeue -u cagostino -t pending | wc -l) -gt 500 ]
     do
         sleep 1
     done
     # Submit the job and capture the job ID
-    # job_id=$(/wistar/kulp/software/slurmq --sbatch "python $HOME/work/scripts/rosetta/multibody/rfDiffusion_binding/multibody_bind.py $p $partners" | awk '/Submitted batch job/ {print $4}')
-    # job_ids+=("$job_id")
-    job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/rosetta/multibody/rfDiffusion_binding/SASA.sh $p $partners" | awk '/Submitted batch job/ {print $4}')
+    # calculate sasa
+    job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/rosetta/multibody/rfDiffusion_binding/SASA_hotspot.sh $p $Ab_contact ${posis[@]}" | awk '/Submitted batch job/ {print $4}')
     job_ids+=("$job_id")
 done
 
@@ -104,10 +180,11 @@ for job_id in "${job_ids[@]}"; do
     do
         sleep 1
     done
-    rm "slurm-$job_id.out"
+    # rm "slurm-$job_id.out"
 done
 
-cat *_binding.csv >> binding_output.csv
-cat *_SASA.csv >> SASA_output.csv
+for posi in "${posis[@]}"; do
+    cat *_posi${posi}_SASA_hotspot.csv >> SASA_posi${posi}.csv
+done
 
 echo "done"

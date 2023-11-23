@@ -93,7 +93,7 @@
 # # Combine data files
 # mkdir data; for i in `ls -d "$tag"*`; do for j in $i/*Bar*; do cat $j/*.data > data/${i}.${j##*/}.data; done; done
 
-mkdir analysis
+# mkdir analysis
 
 path=$(echo "$PWD" | sed 's/.*workspace/workspace/')
 full_path="/Volumes/kulp/linux/users/cagostino/$path/data/"

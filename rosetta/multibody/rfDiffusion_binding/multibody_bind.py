@@ -25,6 +25,9 @@ pose_from_file(pose, sys.argv[1])
 scorefxn = get_fa_scorefxn()
 
 bound = scorefxn(pose)
+print("Colby")
+pyrosetta.bindings.energies.energies_total_score(pose.energies().show(1))
+print("Agostino")
 unbind(pose, sys.argv[2])
 unbound = scorefxn(pose)
 binding = unbound - bound
@@ -35,4 +38,5 @@ fname = f"{sys.argv[1][:-4]}_binding.csv"
 f = open(fname,'w+')
 f.write(content)
 f.close()
+
 

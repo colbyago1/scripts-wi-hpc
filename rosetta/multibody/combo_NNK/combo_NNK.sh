@@ -4,11 +4,11 @@ depth=5 # number of mutations
 partners="A_B"
 pdb="$1"
 CUTOFF_PERCENTAGE=0
-positions=(123 125 126)
+positions=(163 164 165 232 233 234 238 239 296 321 323 324 325 326 332 334 337 338 339)
 # no muts to C
-aminos=(G A L M)
-# aminos=(G A L M F W K Q E S P V I Y H R N D T)
+aminos=(G A L M F W K Q E S P V I Y H R N D T)
 relax=0
+search_string=${pdb::-4}
 
 mkdir rss
 mkdir slurms
@@ -28,8 +28,10 @@ for position in "${positions[@]}"; do
     done
 done
 
+echo "muts: ${muts[@]}"
+
 # WT
-python $HOME/work/scripts/rosetta/multibody/combo_NNK/mutate_wt.py "$pdb" "$partners"
+python /wistar/kulp/users/cagostino/scripts/rosetta/multibody/combo_NNK/mutate_wt.py "$pdb" "$partners"
 read wt_unbound wt_nrg < "wt"
 
 # init output.csv
@@ -56,6 +58,8 @@ do
                 fi
             done
         done
+
+        echo "combos: ${combos[@]}"
 
         # Initialize the muts array as an empty array
         declare -a sorted_combos=()
@@ -86,12 +90,12 @@ do
 
     for combo in "${unique_combos[@]}"
     do
-        while [ $(squeue -u cagostino -t pending | wc -l) -gt 50 ]
+        while [ $(squeue -u nlaenger -t pending | wc -l) -gt 50 ]
         do
             sleep 1
         done
         # Submit the job and capture the job ID
-        job_id=$(/wistar/kulp/software/slurmq --sbatch "python $HOME/work/scripts/rosetta/multibody/combo_NNK/mutate.py --pdb $pdb --partners $partners --wt_nrg $wt_nrg --index $index --relax $relax --mut $combo" | awk '/Submitted batch job/ {print $4}')
+        job_id=$(/wistar/kulp/software/slurmq --sbatch "python /wistar/kulp/users/cagostino/scripts/rosetta/multibody/combo_NNK/mutate.py --pdb $pdb --partners $partners --wt_nrg $wt_nrg --index $index --relax $relax --mut $combo" | awk '/Submitted batch job/ {print $4}')
         job_ids+=("$job_id")
     done
 
@@ -107,11 +111,12 @@ do
     mv rs* rss
     mv slurm-* slurms
 
-    top_designs=($(python $HOME/work/scripts/rosetta/multibody/combo_NNK/find_top_designs.py "output_${index}.csv" $wt_unbound $((depth - index)) $CUTOFF_PERCENTAGE))
+    top_designs=($(python /wistar/kulp/users/cagostino/scripts/rosetta/multibody/combo_NNK/find_top_designs.py "output_${index}.csv" $wt_unbound $((depth - index)) $CUTOFF_PERCENTAGE))
 
     top_combos=()
     for design in "${top_designs[@]}"; do
-        combo=$(echo "$design" | sed 's/.*0001_\([^\.]*\)\.pdb/\1/')
+        echo $design
+        combo=$(echo "$design" | sed "s/.*${search_string}_\([^\.]*\)\.pdb/\1/")
         echo "combo with underscore: $combo"
         combo="${combo//_/ }"
         echo "combo with space: $combo"
@@ -121,7 +126,7 @@ do
     echo "top combos: ${top_combos[@]}"
 
     mv "output_${index}.csv" csvs
-    mv "${pdb::-4}_*.pdb" pdbs
+    mv ${pdb::-4}_*.pdb pdbs
 
     # increment index
     ((index++))

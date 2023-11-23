@@ -13,5 +13,5 @@ set sphere_quality, 2
 set opaque_background, off
 set ray_opaque_background, off
 
-And to make png files
+# And to make png files
 # png ~/Desktop/file_name, dpi=100, ray=1

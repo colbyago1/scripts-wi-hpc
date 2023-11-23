@@ -12,7 +12,7 @@ fi
 # Loop through the strings
 for ((i=0; i<${#mut}; i++)); do
     if [ "${wt:$i:1}" != "${mut:$i:1}" ]; then
-        echo -n "${i}${mut:$i:1} "
+        echo -n "${wt:$i:1}$((i+1))${mut:$i:1} "
     fi
 done
 

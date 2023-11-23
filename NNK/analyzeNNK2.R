@@ -1353,6 +1353,9 @@ plotPieDistributionAA.new <- function(dat,pos,make_ave=FALSE,landscape=FALSE,lab
   if (length(dat) == 6){
     glayout=c(2,3);
   }
+  if (length(dat) == 2){
+    glayout=c(1,2);
+  }
   old.par=par(mfrow=glayout);
   for (i in 1:length(dat)){
             t1 = table(as.vector(subset(get(dat[i]), RESI == position)$AA));     
