@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# tail -n +3 allbb.fa | awk '/^>/{if(x)close(x);x=sprintf("output/allbb_0.2_seq_%d.fasta", ++i)}{print > x}'
-
 # Create the CSV file and write header
 echo "description,pLDDT,pTM,ipTM,rmsd" > output.csv
 

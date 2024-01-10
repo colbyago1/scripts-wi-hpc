@@ -1,6 +1,5 @@
 from itertools import permutations
 
-
 def get_pairs(lst):
     pairs = []
     for i in range(len(lst)-1):
@@ -39,7 +38,7 @@ def allowable_lists(nums, pairs=0):
 # 4: A617-633
 # B: B1-1618
 
-nums = [ "A87-92","A234-240","A527-529","A617-633"]
+# nums = [ "A87-92","A234-240","A527-529","A617-633"]
 
 # # Contigs (5FYK)
 # # 1: A87-92
@@ -49,6 +48,14 @@ nums = [ "A87-92","A234-240","A527-529","A617-633"]
 # # B: B1-225
 
 # nums = [ "A87-92","A238-243","A527-529","A616-633"]
+
+# # Contigs (CoV-2-RBD)
+# 1: A415-419
+# 2: A444-A458
+# 3: A485-A507
+# B: B19-615 
+
+nums = [ "A415-419","A444-458","A485-507"]
 
 r = list(allowable_lists(nums))
 for i in (r):
@@ -60,8 +67,8 @@ for i in (r):
             str = ("2-30/%s" % (j))
             k+=1
         else:
-            str = ("%s/2-60/%s" % (str,j))
-    print("[%s/2-30/0 B1-1618]" % str)
+            str = ("%s/2-30/%s" % (str,j))
+    print("[%s/2-30/0 B19-615]" % str)
 print("Number of combinations: %d" % len(list(r)))
 
 

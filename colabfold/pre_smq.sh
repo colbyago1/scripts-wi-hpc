@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=colab
-#SBATCH -c 5 #try 20
-#SBATCH --mem 50GB #350
+#SBATCH -c 4 #try 20
+#SBATCH --mem 40GB #100
 #SBATCH --partition=smq
 #SBATCH --gres=gpu:1
 #SBATCH --exclude=node050,node051

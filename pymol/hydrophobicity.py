@@ -28,6 +28,7 @@ def color_by_b_factor():
 def main():
     
     csv_file_path = '/home/cagostino/work/scripts/pymol/hydrophobicity_table.csv'
+    csv_file_path = '/Volumes/cagostino/scripts/pymol/hydrophobicity_table.csv'
     data = load_csv(csv_file_path)
 
     pdb_path = sys.argv[1]

@@ -90,7 +90,7 @@ do
 
     for combo in "${unique_combos[@]}"
     do
-        while [ $(squeue -u nlaenger -t pending | wc -l) -gt 50 ]
+        while [ $(squeue -u cagostino -t pending | wc -l) -gt 50 ]
         do
             sleep 1
         done

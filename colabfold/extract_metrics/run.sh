@@ -4,6 +4,9 @@
 # path2="traditional_mini/dir_v3g_topo01/run*/pmpnn_seqs/seqs/a3m2/dir*"
 # path="refinement/untraditional_canonical_seq_sampling/*/pmpnn_seqs/seqs/a3m"
 path="/home/cagostino/work/workspace/prefusion_gp41/rfDiffusion/refinement/CC/*prot_topo*/a3m"
+path="/home/cagostino/work/workspace/prefusion_gp41/order/colabfold/a3ms"
+path="/home/cagostino/work/workspace/prefusion_gp41/order/colabfold/order/*/a3m"
+path="/home/cagostino/work/workspace/prefusion_gp41/order/colabfold/order/AF"
 
 # Array to store job IDs
 job_ids=()
@@ -11,8 +14,9 @@ job_ids=()
 for d in $path; do
     cd $d
     echo $d
-    # job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/colabfold/extract_metrics/extract_metrics.sh; $HOME/work/scripts/colabfold/extract_metrics/CF_rmsd.sh"; $HOME/work/scripts/colabfold/extract_metrics/CF_rmsd_bb.sh" | awk '/Submitted batch job/ {print $4}')
-    job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/colabfold/extract_metrics/CF_rmsd.sh" | awk '/Submitted batch job/ {print $4}')
+    job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/colabfold/extract_metrics/extract_metrics.sh; $HOME/work/scripts/colabfold/extract_metrics/CF_rmsd.sh" | awk '/Submitted batch job/ {print $4}')
+    # job_id=$(/wistar/kulp/software/slurmq --sbatch "$HOME/work/scripts/colabfold/extract_metrics/CF_rmsd.sh" | awk '/Submitted batch job/ {print $4}')
+    # $HOME/work/scripts/colabfold/extract_metrics/CF_rmsd_bb.sh
     job_ids+=("$job_id")
     cd -
 done
