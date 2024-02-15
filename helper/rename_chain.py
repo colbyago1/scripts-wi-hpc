@@ -1,3 +1,5 @@
+# !/usr/bin/env python3
+
 from Bio.PDB import PDBParser, PDBIO, Select
 import sys
 

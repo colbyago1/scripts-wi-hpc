@@ -5,7 +5,6 @@
 # #SBATCH --partition=smq
 #SBATCH --partition=gpu
 #SBATCH --gres=gpu:1
-# #SBATCH --partition=defq
 #SBATCH --time=2-11:59:59
 module load AlphaFold
 export ALPHAFOLD_HHBLITS_N_CPU=14

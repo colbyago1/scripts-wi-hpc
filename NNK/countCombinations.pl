@@ -27,27 +27,27 @@ my %codons_all = (
 #my $pre ="ATACGGTCT";
 #my $pre ="GAAAATATC";  # TATA would be WT, so TATC is the first barcode
 
-# # L1
-# my $pre ="TATC";  # TATA would be WT, so TATC is the first barcode
-# # Post to sequence of interest
-# #my $post="ATAATCGTC"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
-# # L1
-# my $post="ATAA"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
-# # L1
-# # Length between pre and post
-# my $len =18;
-# my $wt = "TNNGKN";
-# print "L1\n";	
-
-# L2
-my $pre ="GAGT";  # TATA would be WT, so TATC is the first barcode
-# L2
-my $post="TTGG"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
-# L2
+# L1
+my $pre ="TATC";  # TATA would be WT, so TATC is the first barcode
+# Post to sequence of interest
+#my $post="ATAATCGTC"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
+# L1
+my $post="ATAA"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
+# L1
 # Length between pre and post
-my $len =12;
-my $wt = "AGGD";
-print "L2\n";	
+my $len =18;
+my $wt = "TNNGKN";
+print "L1\n";	
+
+# # L2
+# my $pre ="GAGT";  # TATA would be WT, so TATC is the first barcode
+# # L2
+# my $post="TTGG"; # ATCATCGTC would be WT, so ATAATCGTC is the second barcode
+# # L2
+# # Length between pre and post
+# my $len =12;
+# my $wt = "AGGD";
+# print "L2\n";	
 
 # # L3
 # my $pre ="AGAC";  # TATA would be WT, so TATC is the first barcode
